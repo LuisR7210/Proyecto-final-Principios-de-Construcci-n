@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
@@ -35,7 +36,7 @@
         <Font name="Bauhaus 93" size="50.0" />
       </font>
     </Label>
-    <TabPane layoutX="50.0" layoutY="160.0" prefHeight="400.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+    <TabPane layoutX="50.0" layoutY="160.0" prefHeight="400.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
         <Tab text="Documentos">
           <content>
@@ -49,6 +50,13 @@
                     <TableColumn prefWidth="299.0" text="Comentarios" fx:id="documentos_columna_comentarios" />
                   </columns>
                 </TableView>
+                <Button id="" fx:id="boton_subir_documento" alignment="CENTER" font="$x1" layoutX="786.0" layoutY="75.0" mnemonicParsing="false" onAction="#subirDocumento" prefWidth="200.0" text="Subir documento">
+                  <textFill>
+                    <Color blue="0.600" green="0.000" red="0.047" fx:id="x2" />
+                  </textFill>
+                </Button>
+                <Button id="" fx:id="boton_modificar_documento" font="$x1" layoutX="811.0" layoutY="185.0" mnemonicParsing="false" onAction="#modificarDocumento" prefWidth="150.0" text="Modificar" textFill="BLACK" />
+                <Button id="" fx:id="boton_descargar_documento" font="$x1" layoutX="811.0" layoutY="268.0" mnemonicParsing="false" onAction="#descargarDocumento" prefWidth="150.0" text="Descargar" textFill="BLACK" />
               </children>
             </AnchorPane>
           </content>
@@ -59,13 +67,17 @@
               <children>
                 <TableView fx:id="tabla_reportes" layoutX="25.0" layoutY="10.0" prefHeight="350.0" prefWidth="750.0" tableMenuButtonVisible="false">
                   <columns>
-                    <TableColumn prefWidth="150.0" text="Mes" fx:id="reportes_columna_mes" />
-                    <TableColumn prefWidth="80.0" text="Horas" fx:id="reportes_columna_horas" />
-                    <TableColumn prefWidth="110.0" text="Estado" fx:id="reportes_columna_estado" />
-                    <TableColumn prefWidth="110.0" text="Fecha de subida" fx:id="reportes_columna_fecha" />
+                    <TableColumn prefWidth="110.0" text="Nombre" fx:id="reportes_columna_nombre" />
+                    <TableColumn maxWidth="5000.0" minWidth="10.0" prefWidth="100.0" text="Mes" fx:id="reportes_columna_mes" />
+                    <TableColumn prefWidth="50.0" text="Horas" fx:id="reportes_columna_horas" />
+                    <TableColumn prefWidth="90.0" text="Estado" fx:id="reportes_columna_estado" />
+                    <TableColumn prefWidth="100.0" text="Fecha de subida" fx:id="reportes_columna_fecha" />
                     <TableColumn prefWidth="299.0" text="Comentarios" fx:id="reportes_columna_comentarios" />
                   </columns>
                 </TableView>
+                <Button id="boton_salir" fx:id="boton_subir_reporte" alignment="CENTER" font="$x1" layoutX="786.0" layoutY="75.0" mnemonicParsing="false" onAction="#subirReporte" prefWidth="200.0" text="Subir reporte" textFill="$x2" />
+                <Button id="boton_salir" fx:id="boton_modificar_reporte" font="$x1" layoutX="811.0" layoutY="185.0" mnemonicParsing="false" onAction="#modificarReporte" prefWidth="150.0" text="Modificar" textFill="BLACK" />
+                <Button id="boton_salir" fx:id="boton_descargar_reporte" font="$x1" layoutX="811.0" layoutY="268.0" mnemonicParsing="false" onAction="#descargarReporte" prefWidth="150.0" text="Descargar" textFill="BLACK" />
               </children>
             </AnchorPane>
           </content>
@@ -77,8 +89,5 @@
         <Font name="Times New Roman Bold" size="24.0" />
       </font>
     </Label>
-    <Button id="boton_salir" fx:id="boton_subir" alignment="CENTER" font="$x1" layoutX="875.0" layoutY="230.0" mnemonicParsing="false" onAction="#subir" prefWidth="150.0" text="Subir" textFill="#0c0099" />
-    <Button id="boton_salir" fx:id="boton_modificar" font="$x1" layoutX="875.0" layoutY="355.0" mnemonicParsing="false" onAction="#modificar" prefWidth="150.0" text="Modificar" textFill="BLACK" />
-    <Button id="boton_salir" fx:id="boton_descargar" font="$x1" layoutX="875.0" layoutY="438.0" mnemonicParsing="false" onAction="#descargar" prefWidth="150.0" text="Descargar" textFill="BLACK" />
   </children>
 </AnchorPane>

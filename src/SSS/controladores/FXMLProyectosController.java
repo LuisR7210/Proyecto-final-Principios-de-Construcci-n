@@ -33,22 +33,22 @@ public class FXMLProyectosController implements Initializable {
   @FXML
   private Font x1;
   @FXML
-  private TableView<?> tabla_estudiantes;
-  @FXML
-  private TableColumn<?, ?> estudiantes_columna_matricula;
-  @FXML
-  private TableColumn<?, ?> estudiantes_columna_nombre;
-  @FXML
-  private TableColumn<?, ?> documentos_columna_telefono;
-  @FXML
-  private TableColumn<?, ?> estudiantes_columna_correo;
-  @FXML
-  private TableColumn<?, ?> estudiantes_columna_cuenta;
-  @FXML
-  private Button boton_documentos;
-  @FXML
   private Button boton_modificar;
-
+  @FXML
+  private TableView<?> tabla_proyectos;
+  @FXML
+  private TableColumn<?, ?> proyectos_columna_proyecto;
+  @FXML
+  private TableColumn<?, ?> proyectos_columna_unidad;
+  @FXML
+  private TableColumn<?, ?> proyectos_columna_jefe;
+  @FXML
+  private TableColumn<?, ?> proyectos_columna_estudiante;
+  @FXML
+  private Button boton_registrar;
+  @FXML
+  private Button boton_detalles;
+  
   private Main principal;
   private Stage stage;
   
@@ -77,12 +77,17 @@ public class FXMLProyectosController implements Initializable {
     stage.close();
   }
 
-  @FXML
-  private void abrirVentanaDocumentos(ActionEvent event) {
-  }
 
   @FXML
   private void modificar(ActionEvent event) {
+  }
+
+  @FXML
+  private void registrarProyecto(ActionEvent event) {
+  }
+
+  @FXML
+  private void verDetalles(ActionEvent event) {
   }
   
 }

@@ -39,12 +39,12 @@
       <columns>
         <TableColumn prefWidth="100.0" text="Matrícula" fx:id="estudiantes_columna_matricula" />
         <TableColumn prefWidth="250.0" text="Nombre" fx:id="estudiantes_columna_nombre" />
-        <TableColumn prefWidth="100.0" text="Teléfono" fx:id="documentos_columna_telefono" />
+        <TableColumn prefWidth="100.0" text="Teléfono" fx:id="estudiantes_columna_telefono" />
         <TableColumn prefWidth="250.0" text="Correo electrónico" fx:id="estudiantes_columna_correo" />
         <TableColumn prefWidth="99.0" text="Cuenta" fx:id="estudiantes_columna_cuenta" />
       </columns>
     </TableView>
     <Button id="boton_salir" fx:id="boton_documentos" alignment="CENTER" font="$x1" layoutX="875.0" layoutY="230.0" mnemonicParsing="false" onAction="#abrirVentanaDocumentos" prefWidth="200.0" text="Ver documentos" textFill="#0c0099" />
-    <Button id="boton_salir" fx:id="boton_modificar" font="$x1" layoutX="875.0" layoutY="355.0" mnemonicParsing="false" onAction="#modificar" prefWidth="200.0" text="Ver información" textFill="BLACK" />
+    <Button id="boton_salir" fx:id="boton_informacion" font="$x1" layoutX="875.0" layoutY="355.0" mnemonicParsing="false" onAction="#verInformacion" prefWidth="200.0" text="Ver información" textFill="BLACK" />
   </children>
 </AnchorPane>

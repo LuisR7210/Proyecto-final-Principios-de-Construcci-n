@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="600.0" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="SSS.controladores.FXMLRegistrarProyectoController">
+  <children>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="600.0" layoutX="0.0" layoutY="0.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+    <Label layoutX="136.0" layoutY="30.0" text="Registrar proyecto" textFill="BLACK">
+      <font>
+        <Font name="Bauhaus 93" size="40.0" />
+      </font>
+    </Label>
+    <Label layoutX="193.0" layoutY="570.0" text="Sistema de Servicio Social" textFill="WHITE">
+      <font>
+        <Font name="Times New Roman" size="20.0" />
+      </font>
+    </Label>
+    <Rectangle arcHeight="0.0" arcWidth="0.0" disable="false" fill="#003d99" height="30.0" layoutX="0.0" layoutY="570.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+    <Pane id="pane_horario_alumno" fx:id="pane_proyecto" disable="false" layoutX="10.0" layoutY="100.0" prefHeight="450.0" prefWidth="580.0" visible="true">
+      <children>
+        <Label layoutX="30.0" layoutY="25.0" prefWidth="150.0" text="Nombre:">
+          <font>
+            <Font name="Times New Roman Bold Italic" size="18.0" fx:id="x1" />
+          </font>
+        </Label>
+        <TextField layoutX="190.0" layoutY="25.0" prefWidth="350.0" promptText="" text="" />
+        <Label font="$x1" layoutX="30.0" layoutY="64.0" prefWidth="150.0" text="Descripción:" />
+        <TextArea layoutX="190.0" layoutY="64.0" prefHeight="136.0" prefWidth="350.0" wrapText="true" />
+        <Label font="$x1" layoutX="30.0" layoutY="225.0" prefWidth="150.0" text="Actividades:" />
+        <TextArea layoutX="190.0" layoutY="225.0" prefHeight="136.0" prefWidth="350.0" wrapText="true" />
+        <Button id="boton_salir" layoutX="65.0" layoutY="404.0" mnemonicParsing="false" onAction="#verDetalles" prefWidth="150.0" text="Cancelar" textFill="BLACK">
+          <font>
+            <Font name="Roboto Slab Regular" size="18.0" fx:id="x2" />
+          </font>
+        </Button>
+        <Button id="boton_salir" font="$x2" layoutX="365.0" layoutY="404.0" mnemonicParsing="false" onAction="#verDetalles" prefWidth="150.0" text="Siguiente" textFill="BLACK" />
+      </children>
+    </Pane>
+    <Pane id="pane_materias" fx:id="pane_horario" disable="false" layoutX="10.0" layoutY="100.0" prefHeight="450.0" prefWidth="580.0" visible="false" />
+  </children>
+</AnchorPane>

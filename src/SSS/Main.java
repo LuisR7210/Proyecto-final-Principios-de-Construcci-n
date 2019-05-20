@@ -57,6 +57,7 @@ public class Main extends Application {
       controlador.setPrincipal(this);
       ventana_estudiantes.show();
     } catch (IOException e) {
+      System.out.println(e);
       System.out.println("No se encuentra el archivo de la interfaz");
     }
   }
