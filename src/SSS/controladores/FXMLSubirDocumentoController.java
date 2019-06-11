@@ -5,9 +5,16 @@
  */
 package SSS.controladores;
 
+import SSS.DAO.SQLDocumento;
 import SSS.modelos.Documento;
+import SSS.modelos.Estudiante;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,18 +58,19 @@ public class FXMLSubirDocumentoController implements Initializable {
   @FXML
   private ComboBox<String> comboBox_documentos;
   @FXML
-  private Pane pane_reporte;
-  @FXML
-  private ComboBox<String> comboBox_meses;
-  @FXML
-  private TextField tf_horas;
-  @FXML
   private ComboBox<String> comboBox_estados;
+  @FXML
+  private Pane pane_estado;
   
-  private Stage stage;
   private Alert alerta;
   private Documento documento;
-  private boolean es_reporte=true;
+  private File archivo;
+  private File destino;
+  private Estudiante estudiante;
+  
+  public void setEstudiante(Estudiante est){
+    estudiante=est;
+  }
   
   public void setDocumento(Documento doc) {
     this.documento = doc;
@@ -71,17 +79,8 @@ public class FXMLSubirDocumentoController implements Initializable {
     ta_comentarios.setText(documento.getComentarios());
     label_archivo.setText(documento.getArchivo().getName());
     comboBox_estados.setValue(documento.getEstado());
-    if (es_reporte) {
-      comboBox_meses.setValue(documento.getMes());
-      tf_horas.setText(Integer.toString(documento.getHoras()));
-    }
-  }
-  
-  public void setBooleanReporte(boolean es_reporte){
-    this.es_reporte=es_reporte;
-    if(!es_reporte){
-      pane_reporte.setVisible(false);
-    }
+    archivo=documento.getArchivo();
+    pane_estado.setVisible(true);
   }
 
   /**
@@ -89,47 +88,71 @@ public class FXMLSubirDocumentoController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    ObservableList<String> meses = FXCollections.observableArrayList();
+    pane_estado.setVisible(false);
     ObservableList<String> estados = FXCollections.observableArrayList();
     ObservableList<String> documentos = FXCollections.observableArrayList();
-    ObservableList<String> reportes = FXCollections.observableArrayList();
-    meses.addAll("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
-    comboBox_meses.setItems(meses);
-    comboBox_meses.setValue("Enero");
     estados.addAll("Validado", "Sin validar", "NO válido");
     comboBox_estados.setItems(estados);
     comboBox_estados.setValue("Sin validar");
     documentos.addAll("Oficio de Presentación", "Horario de Clases", "Carta de Aceptación",
-            "Formato de Registro y Plan de Actividades de Servicio Social",
-            "Carta de Terminación", "Memoria");
+            "Formato de registro y plan de actividades", "Carta de Terminación", "Memoria");
     comboBox_documentos.setItems(documentos);
     comboBox_documentos.setValue("Oficio de presentación");
-    reportes.addAll("Reporte Mensual", "Reporte Final");
   }  
 
   @FXML
   private void cancelar(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+    Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     stage.close();
   }
 
   @FXML
   private void subir(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+    if (archivo == null) {
+      alerta = new Alert(Alert.AlertType.WARNING);
+      alerta.setTitle("Indicación");
+      alerta.setHeaderText("NO se ingresaron todos los datos obligatorios (*)");
+      alerta.showAndWait();
+      return;
+    }
+    SQLDocumento sql_documento=new SQLDocumento();
+    Documento temporal=new Documento(0, 
+              comboBox_documentos.getValue(),
+              LocalDate.now(),
+              ta_comentarios.getText(),
+              archivo,
+              comboBox_estados.getValue()
+      );
+    if(documento==null){
+      sql_documento.registrarDocumento(temporal, estudiante);
+    }
+    else {
+      sql_documento.modificarDocumento(documento, temporal, estudiante);
+    }
+    Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     stage.close();
   }
 
   @FXML
   private void subirArchivo(ActionEvent event) {
+    Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
     FileChooser file_chooser = new FileChooser();
-    file_chooser.setTitle("Escoja el documento");
+    file_chooser.setTitle("Seleccione el documento escaneado");
     file_chooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Archivos de imágen", "*.jpg", "*.png"),
+            new FileChooser.ExtensionFilter("Archivos de imágen (*.jpg *.png)", "*.jpg", "*.png"),
             new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf")
     );
-    
-    File archivo = file_chooser.showOpenDialog(stage);
-    label_archivo.setText(archivo.getName());
+    archivo = file_chooser.showOpenDialog(stage);
+    if(archivo!=null){
+      label_archivo.setText(archivo.getName());
+      destino=new File("Documentos Servicio Social/"+archivo.getName());
+      try {
+        Files.copy(Paths.get(archivo.getAbsolutePath()), Paths.get(destino.getAbsolutePath()), REPLACE_EXISTING);
+        archivo=destino;
+      } catch (IOException ex) {
+        System.out.println("Error al cargar el archivo");
+      }
+    }
   }
   
 }

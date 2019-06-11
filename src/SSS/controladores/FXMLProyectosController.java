@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
@@ -48,9 +49,10 @@ public class FXMLProyectosController implements Initializable {
   private Button boton_registrar;
   @FXML
   private Button boton_detalles;
+  @FXML
+  private ComboBox<?> comboBox_periodos;
   
   private Main principal;
-  private Stage stage;
   
   public void setPrincipal(Main principal) {
     this.principal=principal;
@@ -67,14 +69,11 @@ public class FXMLProyectosController implements Initializable {
   @FXML
   private void abrirVentanaPrincipal(MouseEvent event) {
     principal.mostrarVentanaPrincipal();
-    stage = (Stage) ((ImageView) event.getSource()).getScene().getWindow();
-    stage.close();
   }
 
   @FXML
   private void salir(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    stage.close();
+    principal.salir();
   }
 
 
@@ -88,6 +87,10 @@ public class FXMLProyectosController implements Initializable {
 
   @FXML
   private void verDetalles(ActionEvent event) {
+  }
+
+  @FXML
+  private void mostrarProyectosPeriodo(ActionEvent event) {
   }
   
 }

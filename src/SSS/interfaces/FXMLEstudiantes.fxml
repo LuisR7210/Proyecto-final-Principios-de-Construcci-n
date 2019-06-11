@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -25,7 +26,7 @@
         <Font name="Times New Roman" size="20.0" />
       </font>
     </Label>
-    <Button fx:id="boton_salir" layoutX="1006.0" layoutY="7.0" mnemonicParsing="false" onAction="#salir" prefWidth="80.0" text="Salir" textFill="BLACK">
+    <Button fx:id="boton_salir" layoutX="1000.0" layoutY="5.0" mnemonicParsing="false" onAction="#salir" prefWidth="80.0" text="Salir" textFill="BLACK">
       <font>
         <Font name="Roboto Slab Regular" size="18.0" fx:id="x1" />
       </font>
@@ -37,14 +38,23 @@
     </Label>
     <TableView id="tabla_documentos" fx:id="tabla_estudiantes" layoutX="50.0" layoutY="160.0" prefHeight="390.0" prefWidth="800.0" tableMenuButtonVisible="false">
       <columns>
-        <TableColumn prefWidth="100.0" text="Matrícula" fx:id="estudiantes_columna_matricula" />
+        <TableColumn prefWidth="80.0" text="Matrícula" fx:id="estudiantes_columna_matricula" />
         <TableColumn prefWidth="250.0" text="Nombre" fx:id="estudiantes_columna_nombre" />
         <TableColumn prefWidth="100.0" text="Teléfono" fx:id="estudiantes_columna_telefono" />
         <TableColumn prefWidth="250.0" text="Correo electrónico" fx:id="estudiantes_columna_correo" />
-        <TableColumn prefWidth="99.0" text="Cuenta" fx:id="estudiantes_columna_cuenta" />
+        <TableColumn prefWidth="119.0" text="Cuenta" fx:id="estudiantes_columna_cuenta" />
       </columns>
     </TableView>
     <Button id="boton_salir" fx:id="boton_documentos" alignment="CENTER" font="$x1" layoutX="875.0" layoutY="230.0" mnemonicParsing="false" onAction="#abrirVentanaDocumentos" prefWidth="200.0" text="Ver documentos" textFill="#0c0099" />
     <Button id="boton_salir" fx:id="boton_informacion" font="$x1" layoutX="875.0" layoutY="355.0" mnemonicParsing="false" onAction="#verInformacion" prefWidth="200.0" text="Ver información" textFill="BLACK" />
+    <ComboBox fx:id="comboBox_periodos" layoutX="150.0" layoutY="120.0" onAction="#mostrarEstudiantesPeriodo" prefHeight="21.0" prefWidth="200.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ComboBox>
   </children>
 </AnchorPane>

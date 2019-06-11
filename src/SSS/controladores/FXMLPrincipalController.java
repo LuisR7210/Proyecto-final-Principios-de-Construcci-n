@@ -6,11 +6,8 @@
 package SSS.controladores;
 
 import SSS.Main;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -20,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author Luis Roberto Herrera Hernández
  */
-public class FXMLPrincipalController implements Initializable {
+public class FXMLPrincipalController{
 
   @FXML
   private Button boton_salir;
@@ -32,7 +29,6 @@ public class FXMLPrincipalController implements Initializable {
   private Button boton_estudiantes;
   
   private Main principal;
-  private Stage stage;
 
   public void setPrincipal(Main principal) {
     this.principal=principal;
@@ -41,15 +37,10 @@ public class FXMLPrincipalController implements Initializable {
   /**
    * Initializes the controller class.
    */
-  @Override
-  public void initialize(URL url, ResourceBundle rb) {
-    // TODO
-  }  
 
   @FXML
   private void salir(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    stage.close();
+    principal.salir();
   }
 
   @FXML
@@ -61,7 +52,5 @@ public class FXMLPrincipalController implements Initializable {
   private void abrirVentanaEstudiantes(ActionEvent event) {
     principal.mostrarVentanaEstudiantes();
   }
-
-  
   
 }

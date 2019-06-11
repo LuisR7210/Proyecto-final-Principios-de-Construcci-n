@@ -5,11 +5,15 @@
  */
 package SSS.controladores;
 
+import SSS.DAO.SQLDocumento;
 import SSS.Main;
 import SSS.modelos.Documento;
+import SSS.modelos.Estudiante;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -23,13 +27,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -88,8 +92,8 @@ public class FXMLDocumentosController implements Initializable {
   private Button boton_descargar_reporte;
   
   private Main principal;
-  private Stage stage;
-  private Alert alerta;
+  private Estudiante estudiante;
+  private final SQLDocumento sql_documentos=new SQLDocumento();
   private ObservableList<Documento> documentos = FXCollections.observableArrayList();
   private ObservableList<Documento> reportes = FXCollections.observableArrayList();
   
@@ -97,12 +101,26 @@ public class FXMLDocumentosController implements Initializable {
     this.principal=principal;
   }
   
+  public void setEstudiante(Estudiante est){
+    estudiante=est;
+    label_estudiante.setText(estudiante.getMatricula()+" - "+estudiante.getNombre());
+    documentos=sql_documentos.cargarDocumentos(estudiante);
+    tabla_documentos.setItems(documentos);
+  }
+  
   /**
    * Initializes the controller class.
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    tabla_documentos.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    LocalDate fecha_subida=LocalDate.now();
+    documentos.add(new Documento(1, "Carta de Aceptación", fecha_subida, "Luis Roberto Herrera Hernández", new File("Documentos Servicio Social/icono.png"), ""));
+    inicializarTablaDocumentos();
+    inicializarTablaReportes();
+    reportes.add(new Documento(1, "Reporte Mensual", fecha_subida, "Luis Roberto Herrera Hernández", "Mayo", 80, new File("Documentos Servicio Social/icono.png")));
+  }
+  
+  private void inicializarTablaDocumentos(){
     documentos_columna_nombre.setCellValueFactory(
             cellData -> cellData.getValue().getNombreProperty());
     documentos_columna_estado.setCellValueFactory(
@@ -112,12 +130,9 @@ public class FXMLDocumentosController implements Initializable {
     documentos_columna_comentarios.setCellValueFactory(
             cellData -> cellData.getValue().getComentariosProperty());
     tabla_documentos.setPlaceholder(new Label(" No hay documentos registrados."));
-    
-    LocalDate fecha_subida=LocalDate.now();
-    documentos.add(new Documento("Carta de Aceptación", fecha_subida, "Luis Roberto Herrera Hernández", new File("Aqui va la dirección", "ejemplo.png")));
-    tabla_documentos.setItems(documentos);
-    
-    tabla_reportes.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+  }
+  
+  private void inicializarTablaReportes(){
     reportes_columna_nombre.setCellValueFactory(
             cellData -> cellData.getValue().getNombreProperty());
     reportes_columna_mes.setCellValueFactory(
@@ -131,29 +146,22 @@ public class FXMLDocumentosController implements Initializable {
     reportes_columna_comentarios.setCellValueFactory(
             cellData -> cellData.getValue().getComentariosProperty());
     tabla_reportes.setPlaceholder(new Label(" No hay reportes registrados."));
-    
-    reportes.add(new Documento("Reporte Mensual", fecha_subida, "Luis Roberto Herrera Hernández", "Mayo", 80, new File("Aqui va la dirección", "ejemplo.png")));
     tabla_reportes.setItems(reportes);
-  }  
+  }
 
   @FXML
   private void salir(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    stage.close();
+    principal.salir();
   }
-
 
   @FXML
   private void abrirVentanaPrincipal(MouseEvent event) {
     principal.mostrarVentanaPrincipal();
-    stage = (Stage) ((ImageView) event.getSource()).getScene().getWindow();
-    stage.close();
   }
 
   @FXML
   private void subirDocumento(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    mostrarVentanaSubirDocumento(false, "documento");
+    mostrarVentanaSubirDocumento(false);
   }
 
   @FXML
@@ -162,18 +170,32 @@ public class FXMLDocumentosController implements Initializable {
       alertaNoDocumentoSeleccionado("documento");
       return;
     }
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    mostrarVentanaSubirDocumento(true, "documento");
+    mostrarVentanaSubirDocumento(true);
   }
 
   @FXML
   private void descargarDocumento(ActionEvent event) {
+    if (tabla_documentos.getSelectionModel().isEmpty()) {
+      alertaNoDocumentoSeleccionado("documento");
+      return;
+    }
+    DirectoryChooser directory_chooser = new DirectoryChooser();
+    directory_chooser.setTitle("Seleccione la carpeta de destino");
+    File destino = directory_chooser.showDialog(principal.getStage());
+    if(destino==null){
+      return;
+    }
+    destino=new File(destino.getAbsolutePath()+"/"+tabla_documentos.getSelectionModel().getSelectedItem().getArchivo().getName());
+    try {
+      Files.copy(tabla_documentos.getSelectionModel().getSelectedItem().getArchivo().toPath(), destino.toPath(), REPLACE_EXISTING);
+    } catch (IOException ex) {
+      System.out.println("Error al descargar");
+    }
   }
 
   @FXML
   private void subirReporte(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    mostrarVentanaSubirDocumento(false, "reporte");
+    mostrarVentanaSubirReporte(false);
   }
 
   @FXML
@@ -182,15 +204,30 @@ public class FXMLDocumentosController implements Initializable {
       alertaNoDocumentoSeleccionado("reporte");
       return;
     }
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    mostrarVentanaSubirDocumento(true, "reporte");
+    mostrarVentanaSubirReporte(true);
   }
 
   @FXML
   private void descargarReporte(ActionEvent event) {
+    if (tabla_reportes.getSelectionModel().isEmpty()) {
+      alertaNoDocumentoSeleccionado("documento");
+      return;
+    }
+    DirectoryChooser directory_chooser = new DirectoryChooser();
+    directory_chooser.setTitle("Seleccione la carpeta de destino");
+    File destino = directory_chooser.showDialog(principal.getStage());
+    if(destino==null){
+      return;
+    }
+    destino=new File(destino.getAbsolutePath()+"/"+tabla_reportes.getSelectionModel().getSelectedItem().getArchivo().getName());
+    try {
+      Files.copy(tabla_reportes.getSelectionModel().getSelectedItem().getArchivo().toPath(), destino.toPath(), REPLACE_EXISTING);
+    } catch (IOException ex) {
+      System.out.println("Error al descargar");
+    }
   }
   
-  public void mostrarVentanaSubirDocumento(boolean modificar, String tipo_documento) {
+  private void mostrarVentanaSubirDocumento(boolean modificar) {
     try {
       FXMLLoader loader = new FXMLLoader(principal.getClass().getResource("interfaces/FXMLSubirDocumento.fxml"));
       Parent parent_subir_documento = loader.load();
@@ -198,32 +235,51 @@ public class FXMLDocumentosController implements Initializable {
       Stage ventana_subir_documento = new Stage();
       ventana_subir_documento.setScene(scene);
       ventana_subir_documento.initModality(Modality.WINDOW_MODAL);
-      ventana_subir_documento.initOwner(stage);
+      ventana_subir_documento.initOwner(principal.getStage());
       FXMLSubirDocumentoController controlador = loader.getController();
+      controlador.setEstudiante(estudiante);
       if (modificar) {
-        ventana_subir_documento.setTitle("Modificar " + tipo_documento);
-        if ("documento".equals(tipo_documento)) {
-          controlador.setBooleanReporte(false);
-          controlador.setDocumento(tabla_documentos.getSelectionModel().getSelectedItem());
-        } else {
-          controlador.setDocumento(tabla_reportes.getSelectionModel().getSelectedItem());
-        }
+        ventana_subir_documento.setTitle("Modificar documento");
+        controlador.setDocumento(tabla_documentos.getSelectionModel().getSelectedItem());
       } else {
-        ventana_subir_documento.setTitle("Subir " + tipo_documento);
-        if (tipo_documento.equals("documento")) {
-          controlador.setBooleanReporte(false);
-        }
+        ventana_subir_documento.setTitle("Subir documento"); 
       }
       ventana_subir_documento.showAndWait();
+      documentos=sql_documentos.cargarDocumentos(estudiante);
+      tabla_documentos.setItems(documentos);
     } catch (IOException e) {
       System.out.println("No se encuentra el archivo de la interfaz");
     }
   }
   
-  public void alertaNoDocumentoSeleccionado(String tipo_documento) {
-    alerta = new Alert(Alert.AlertType.WARNING);
+  private void mostrarVentanaSubirReporte(boolean modificar) {
+    try {
+      FXMLLoader loader = new FXMLLoader(principal.getClass().getResource("interfaces/FXMLSubirReporte.fxml"));
+      Parent parent_subir_reporte = loader.load();
+      Scene scene = new Scene(parent_subir_reporte);
+      Stage ventana_subir_reporte = new Stage();
+      ventana_subir_reporte.setScene(scene);
+      ventana_subir_reporte.initModality(Modality.WINDOW_MODAL);
+      ventana_subir_reporte.initOwner(principal.getStage());
+      FXMLSubirReporteController controlador = loader.getController();
+      controlador.setEstudiante(estudiante);
+      if (modificar) {
+        ventana_subir_reporte.setTitle("Modificar reporte");
+        controlador.setReporte(tabla_reportes.getSelectionModel().getSelectedItem());
+      } else {
+        ventana_subir_reporte.setTitle("Subir reporte"); 
+      }
+      ventana_subir_reporte.showAndWait();
+    } catch (IOException e) {
+      System.out.println("No se encuentra el archivo de la interfaz");
+    }
+  }
+  
+  private void alertaNoDocumentoSeleccionado(String tipo_documento) {
+    Alert alerta = new Alert(Alert.AlertType.WARNING);
     alerta.setTitle("Indicación");
     alerta.setHeaderText("Primero debes seleccionar un " + tipo_documento + " de la tabla");
     alerta.showAndWait();
   }
+  
 }

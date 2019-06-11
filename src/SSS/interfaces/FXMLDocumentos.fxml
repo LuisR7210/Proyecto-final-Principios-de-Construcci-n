@@ -26,7 +26,7 @@
         <Font name="Times New Roman" size="20.0" />
       </font>
     </Label>
-    <Button fx:id="boton_salir" layoutX="1006.0" layoutY="7.0" mnemonicParsing="false" onAction="#salir" prefWidth="80.0" text="Salir" textFill="BLACK">
+    <Button fx:id="boton_salir" layoutX="1000.0" layoutY="5.0" mnemonicParsing="false" onAction="#salir" prefWidth="80.0" text="Salir" textFill="BLACK">
       <font>
         <Font name="Roboto Slab Regular" size="18.0" fx:id="x1" />
       </font>
@@ -55,7 +55,7 @@
                     <Color blue="0.600" green="0.000" red="0.047" fx:id="x2" />
                   </textFill>
                 </Button>
-                <Button id="" fx:id="boton_modificar_documento" font="$x1" layoutX="811.0" layoutY="185.0" mnemonicParsing="false" onAction="#modificarDocumento" prefWidth="150.0" text="Modificar" textFill="BLACK" />
+                <Button id="" fx:id="boton_modificar_documento" contentDisplay="LEFT" font="$x1" layoutX="811.0" layoutY="185.0" mnemonicParsing="false" onAction="#modificarDocumento" prefWidth="150.0" text="Modificar" textAlignment="LEFT" textFill="BLACK" />
                 <Button id="" fx:id="boton_descargar_documento" font="$x1" layoutX="811.0" layoutY="268.0" mnemonicParsing="false" onAction="#descargarDocumento" prefWidth="150.0" text="Descargar" textFill="BLACK" />
               </children>
             </AnchorPane>
@@ -84,7 +84,7 @@
         </Tab>
       </tabs>
     </TabPane>
-    <Label id="label_estudiane" fx:id="label_estudiante" alignment="CENTER" layoutX="250.0" layoutY="162.0" prefWidth="600.0" text="">
+    <Label id="label_estudiane" fx:id="label_estudiante" alignment="CENTER" layoutX="250.0" layoutY="162.0" prefWidth="800.0" text="">
       <font>
         <Font name="Times New Roman Bold" size="24.0" />
       </font>

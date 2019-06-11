@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.collections.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -25,7 +26,7 @@
         <Font name="Times New Roman" size="20.0" />
       </font>
     </Label>
-    <Button fx:id="boton_salir" layoutX="1006.0" layoutY="7.0" mnemonicParsing="false" onAction="#salir" prefWidth="80.0" text="Salir" textFill="BLACK">
+    <Button fx:id="boton_salir" layoutX="1000.0" layoutY="5.0" mnemonicParsing="false" onAction="#salir" prefWidth="80.0" text="Salir" textFill="BLACK">
       <font>
         <Font name="Roboto Slab Regular" size="18.0" fx:id="x1" />
       </font>
@@ -46,5 +47,14 @@
     <Button id="boton_salir" fx:id="boton_registrar" alignment="CENTER" font="$x1" layoutX="931.0" layoutY="230.0" mnemonicParsing="false" onAction="#registrarProyecto" prefWidth="150.0" text="Registrar" textFill="#0c0099" />
     <Button id="boton_salir" fx:id="boton_detalles" font="$x1" layoutX="931.0" layoutY="355.0" mnemonicParsing="false" onAction="#verDetalles" prefWidth="150.0" text="Ver detalles" textFill="BLACK" />
     <Button id="boton_salir" fx:id="boton_modificar" font="$x1" layoutX="931.0" layoutY="431.0" mnemonicParsing="false" onAction="#modificar" prefWidth="150.0" text="Modificar" textFill="BLACK" />
+    <ComboBox fx:id="comboBox_periodos" layoutX="150.0" layoutY="120.0" onAction="#mostrarProyectosPeriodo" prefHeight="21.0" prefWidth="200.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ComboBox>
   </children>
 </AnchorPane>

@@ -5,9 +5,13 @@
  */
 package SSS.controladores;
 
+import SSS.DAO.SQLEstudiante;
+import SSS.DAO.SQLServicioSocial;
 import SSS.Main;
 import SSS.modelos.Estudiante;
+import SSS.modelos.ServicioSocial;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,14 +20,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -54,11 +57,15 @@ public class FXMLEstudiantesController implements Initializable {
   private TableColumn<Estudiante, String> estudiantes_columna_cuenta;
   @FXML
   private Button boton_informacion;
+  @FXML
+  private ComboBox<String> comboBox_periodos;
   
   private Main principal;
-  private Stage stage;
   private Alert alerta;
+  private final SQLEstudiante sql_estudiantes=new SQLEstudiante();
+  private final SQLServicioSocial sql_servicios=new SQLServicioSocial();
   private ObservableList<Estudiante> estudiantes = FXCollections.observableArrayList();
+  private ArrayList<ServicioSocial> servicios=new ArrayList<>();
   
   public void setPrincipal(Main principal) {
     this.principal=principal;
@@ -69,7 +76,22 @@ public class FXMLEstudiantesController implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    tabla_estudiantes.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    cargarPeriodos();
+    estudiantes=sql_estudiantes.cargarEstudiantes(servicios.get(servicios.size()-1).getId_servicio_social());
+    inicializarTablaEstudiantes();
+  }
+  
+  private void cargarPeriodos(){
+    servicios=sql_servicios.cargarServiciosSociales();
+    ObservableList<String> periodos= FXCollections.observableArrayList();
+    for(int i=0;i<servicios.size();i++){
+      periodos.add(servicios.get(i).getPeriodo());
+    }
+    comboBox_periodos.setItems(periodos);
+    comboBox_periodos.setValue(periodos.get(periodos.size()-1));
+  }
+  
+  private void inicializarTablaEstudiantes(){
     estudiantes_columna_nombre.setCellValueFactory(
             cellData -> cellData.getValue().getNombreProperty());
     estudiantes_columna_matricula.setCellValueFactory(
@@ -81,21 +103,17 @@ public class FXMLEstudiantesController implements Initializable {
     estudiantes_columna_cuenta.setCellValueFactory(
             cellData -> cellData.getValue().getEstadoProperty());
     tabla_estudiantes.setPlaceholder(new Label(" No hay estudiantes registrados."));
-    estudiantes.add(new Estudiante("S17012936", "Luis Roberto Herrera Hernández", "2281196008", "lr_gtx000hh@outlook.com", "Sin validar"));
     tabla_estudiantes.setItems(estudiantes);
-  }  
+  }
 
   @FXML
   private void abrirVentanaPrincipal(MouseEvent event) {
     principal.mostrarVentanaPrincipal();
-    stage = (Stage) ((ImageView) event.getSource()).getScene().getWindow();
-    stage.close();
   }
 
   @FXML
   private void salir(ActionEvent event) {
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    stage.close();
+    principal.salir();
   }
 
   @FXML
@@ -104,9 +122,7 @@ public class FXMLEstudiantesController implements Initializable {
       alertaNoEstudianteSeleccionado();
       return;
     }
-    principal.mostrarVentanaDocumentos();
-    stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-    stage.close();
+    principal.mostrarVentanaDocumentos(tabla_estudiantes.getSelectionModel().getSelectedItem());
   }
 
   @FXML
@@ -117,6 +133,16 @@ public class FXMLEstudiantesController implements Initializable {
     }
     
   }
+
+  @FXML
+  private void mostrarEstudiantesPeriodo(ActionEvent event) {
+    for(int i=0;i<servicios.size();i++){
+      if(servicios.get(i).getPeriodo().equals(comboBox_periodos.getValue())){
+        estudiantes=sql_estudiantes.cargarEstudiantes(servicios.get(i).getId_servicio_social());
+        tabla_estudiantes.setItems(estudiantes);
+      }
+    }
+  }
   
   public void alertaNoEstudianteSeleccionado(){
     alerta = new Alert(Alert.AlertType.WARNING);
@@ -124,4 +150,5 @@ public class FXMLEstudiantesController implements Initializable {
       alerta.setHeaderText("Primero debes seleccionar un estudiante de la tabla");
       alerta.showAndWait();
   }
+  
 }

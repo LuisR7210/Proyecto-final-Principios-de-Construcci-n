@@ -13,18 +13,20 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Estudiante {
   
-  private String matricula;
-  private String nombre;
-  private String telefono;
-  private String correo;
-  private String estado;
+  private final String matricula;
+  private final String nombre;
+  private final String telefono;
+  private final String correo;
+  private final String estado;
+  private final int id_contacto;
 
-  public Estudiante(String matricula, String nombre, String telefono, String correo, String estado) {
+  public Estudiante(String matricula, String nombre, String telefono, String correo, String estado, int contacto) {
     this.matricula = matricula;
     this.nombre = nombre;
     this.telefono = telefono;
     this.correo = correo;
     this.estado = estado;
+    this.id_contacto = contacto;
   }
 
   public String getMatricula() {

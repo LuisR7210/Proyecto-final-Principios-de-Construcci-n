@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Documento {
   
+  private int id_documento;
   private String nombre;
   private String estado;
   private LocalDate fecha_subida;
@@ -25,15 +26,17 @@ public class Documento {
   private int horas;
   private File archivo;
 
-  public Documento(String nombre, LocalDate fecha_subida, String comentarios, File archivo) {
+  public Documento(int id, String nombre, LocalDate fecha_subida, String comentarios, File archivo, String estado) {
+    this.id_documento=id;
     this.nombre = nombre;
     this.fecha_subida = fecha_subida;
     this.comentarios = comentarios;
     this.archivo = archivo;
-    this.estado="Sin validar";
+    this.estado=estado;
   }
 
-  public Documento(String nombre, LocalDate fecha_subida, String comentarios, String mes, int horas, File archivo) {
+  public Documento(int id, String nombre, LocalDate fecha_subida, String comentarios, String mes, int horas, File archivo) {
+    this.id_documento=id;
     this.nombre = nombre;
     this.fecha_subida = fecha_subida;
     this.comentarios = comentarios;
@@ -41,6 +44,10 @@ public class Documento {
     this.horas = horas;
     this.archivo = archivo;
     this.estado="Sin validar";
+  }
+
+  public int getId_documento() {
+    return id_documento;
   }
 
   public String getNombre() {
